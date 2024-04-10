@@ -76,7 +76,7 @@ const PatientList = () => {
                             <TableCell align="left">{patient.email}</TableCell>
                             <TableCell align="left">
                                 <Button onClick={()=>{
-                                    navigate(`/${patient.id}/vitalSigns`)
+                                    navigate(`/${patient.id}`)
                                 }}>View</Button>
                             </TableCell>
                         </TableRow>

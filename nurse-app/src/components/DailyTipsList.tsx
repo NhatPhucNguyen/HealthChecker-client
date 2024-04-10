@@ -1,62 +1,62 @@
-import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client";
 import {
     TableContainer,
     Paper,
+    Box,
     Typography,
+    Button,
     Table,
     TableHead,
     TableRow,
     TableCell,
     TableBody,
-    Button,
-    Box,
+    Link,
 } from "@mui/material";
-import { VitalSign } from "../interfaces/VitalSign";
-import { useNavigate, useParams } from "react-router-dom";
-import { convertToDate } from "../utils/convertDate";
 import AddIcon from "@mui/icons-material/Add";
-const VITAL_SIGNS = gql`
-    query VitalSignByPatient($patientId: ID) {
-        vitalSignByPatient(patientId: $patientId) {
-            bloodPressure
-            heartRate
+import { useNavigate, useParams } from "react-router-dom";
+import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client";
+import DailyTip from "../interfaces/DailyTip";
+import isValidUrl from "../utils/validateUrl";
+const GET_DAILY_TIPS = gql`
+    query DailyTipByPatient($patientId: ID) {
+        dailyTipByPatient(patientId: $patientId) {
+            content
             id
-            oxygenSaturation
             patient
-            respiratoryRate
-            temperature
-            updatedAt
+            reference
+            title
         }
     }
 `;
-const DELETE_VITAL_SIGN = gql`
-    mutation Mutation($deleteVitalSignId: ID) {
-        deleteVitalSign(id: $deleteVitalSignId) {
+const DELETE_DAILY_TIP = gql`
+    mutation Mutation($deleteDailyTipId: ID) {
+        deleteDailyTip(id: $deleteDailyTipId) {
             id
         }
     }
 `;
-const VitalSignList = () => {
-    const { patientId } = useParams() as { patientId: string };
+const DailyTipsList = () => {
     const navigate = useNavigate();
-    const { data } = useQuery<{ vitalSignByPatient: VitalSign[] }>(
-        VITAL_SIGNS,
+    const client = useApolloClient();
+    const { patientId } = useParams() as { patientId: string };
+    const { data } = useQuery<{ dailyTipByPatient: DailyTip[] }>(
+        GET_DAILY_TIPS,
         {
             variables: {
                 patientId: patientId,
             },
-            onError: () => {
-                navigate("/");
-            },
         }
-    );    
-    console.log(data);
-    const [deleteMutation] = useMutation(DELETE_VITAL_SIGN);
-    const client = useApolloClient();
+    );
+    const [deleteMutation] = useMutation(DELETE_DAILY_TIP);
     return (
         <>
             <TableContainer
-                sx={{ padding: 1, width: "95%", margin: "auto", marginTop: 2 }}
+                sx={{
+                    padding: 1,
+                    width: "95%",
+                    margin: "auto",
+                    marginTop: 2,
+                    backgroundColor: "#e4f7f9",
+                }}
                 component={Paper}
             >
                 <Box display={"flex"} justifyContent={"space-between"}>
@@ -65,13 +65,13 @@ const VitalSignList = () => {
                         fontSize={26}
                         fontWeight={"bold"}
                     >
-                        Vital Signs List
+                        Daily Tips
                     </Typography>
                     <Button
                         variant="contained"
                         color="success"
                         onClick={() => {
-                            navigate("vitalSigns/add");
+                            navigate("dailyTips/add");
                         }}
                     >
                         Add <AddIcon />
@@ -80,21 +80,16 @@ const VitalSignList = () => {
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Blood Pressure</TableCell>
-                            <TableCell align="left">Temperature</TableCell>
-                            <TableCell align="left">Heart Rate</TableCell>
-                            <TableCell align="left">
-                                Oxygen Saturation
-                            </TableCell>
-                            <TableCell align="left">Respiratory Rate</TableCell>
-                            <TableCell align="left">Update Time</TableCell>
+                            <TableCell>Title</TableCell>
+                            <TableCell align="left">Content</TableCell>
+                            <TableCell align="left">Reference</TableCell>
                             <TableCell align="left">Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {data?.vitalSignByPatient.map((vitalSign) => (
+                        {data?.dailyTipByPatient.map((dailyTip) => (
                             <TableRow
-                                key={vitalSign.id}
+                                key={dailyTip.id}
                                 sx={{
                                     "&:last-child td, &:last-child th": {
                                         border: 0,
@@ -104,27 +99,32 @@ const VitalSignList = () => {
                                 hover={true}
                             >
                                 <TableCell component="th" scope="row">
-                                    {vitalSign.bloodPressure}
+                                    {dailyTip.title}
                                 </TableCell>
                                 <TableCell align="left">
-                                    {vitalSign.temperature}
+                                    {dailyTip.content}
                                 </TableCell>
                                 <TableCell align="left">
-                                    {vitalSign.heartRate}
-                                </TableCell>
-                                <TableCell align="left">
-                                    {vitalSign.oxygenSaturation}
-                                </TableCell>
-                                <TableCell align="left">
-                                    {vitalSign.respiratoryRate}
-                                </TableCell>
-                                <TableCell align="left">
-                                    {convertToDate(vitalSign.updatedAt)}
+                                    {isValidUrl(dailyTip.reference) ? (
+                                        <Link
+                                            href={dailyTip.reference}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            {dailyTip.reference.length > 20
+                                                ? "Link"
+                                                : dailyTip.reference}
+                                        </Link>
+                                    ) : (
+                                        "No Reference"
+                                    )}
                                 </TableCell>
                                 <TableCell align="left">
                                     <Button
                                         onClick={() => {
-                                            navigate(`vitalSigns/edit/${vitalSign.id}`);
+                                            navigate(
+                                                `dailyTips/edit/${dailyTip.id}`
+                                            );
                                         }}
                                     >
                                         Edit
@@ -135,13 +135,12 @@ const VitalSignList = () => {
                                             const response =
                                                 await deleteMutation({
                                                     variables: {
-                                                        deleteVitalSignId:
-                                                            vitalSign.id,
+                                                        deleteDailyTipId:
+                                                            dailyTip.id,
                                                     },
                                                 });
                                             if (
-                                                response.data?.deleteVitalSign
-                                                    .id
+                                                response.data?.deleteDailyTip.id
                                             ) {
                                                 client.refetchQueries({
                                                     include: "all",
@@ -162,4 +161,4 @@ const VitalSignList = () => {
     );
 };
 
-export default VitalSignList;
+export default DailyTipsList;
