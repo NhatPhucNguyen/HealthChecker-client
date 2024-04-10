@@ -1,3 +1,4 @@
+import AlertList from "../components/AlertList";
 import DailyTipsList from "../components/DailyTipsList";
 import VitalSignList from "../components/VitalSignList";
 
@@ -6,6 +7,7 @@ const Patient = () => {
         <>
             <VitalSignList />
             <DailyTipsList />
+            <AlertList />
         </>
     );
 };
