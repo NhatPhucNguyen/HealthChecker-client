@@ -89,7 +89,7 @@ const VitalSignForm = ({ isUpdate }: FormProps) => {
             });
             if (response.data) {
                 client.refetchQueries({ include: "all" });
-                navigate("../..");
+                navigate("..");
             }
         }
         if (vitalSignId) {
@@ -101,7 +101,7 @@ const VitalSignForm = ({ isUpdate }: FormProps) => {
             });
             if (response.data) {
                 client.refetchQueries({ include: "all" });
-                navigate("../..");
+                navigate("..");
             }
         }
     };
@@ -113,7 +113,6 @@ const VitalSignForm = ({ isUpdate }: FormProps) => {
     };
     useEffect(() => {
         if (data?.vitalSign) {
-            console.log(data.vitalSign);
             setVitalSign(data.vitalSign);
         }
     }, [data?.vitalSign]);

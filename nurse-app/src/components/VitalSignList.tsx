@@ -49,8 +49,7 @@ const VitalSignList = () => {
                 navigate("/");
             },
         }
-    );    
-    console.log(data);
+    );
     const [deleteMutation] = useMutation(DELETE_VITAL_SIGN);
     const client = useApolloClient();
     return (
@@ -71,7 +70,7 @@ const VitalSignList = () => {
                         variant="contained"
                         color="success"
                         onClick={() => {
-                            navigate("vitalSigns/add");
+                            navigate("add");
                         }}
                     >
                         Add <AddIcon />
@@ -124,7 +123,7 @@ const VitalSignList = () => {
                                 <TableCell align="left">
                                     <Button
                                         onClick={() => {
-                                            navigate(`vitalSigns/edit/${vitalSign.id}`);
+                                            navigate(`edit/${vitalSign.id}`);
                                         }}
                                     >
                                         Edit

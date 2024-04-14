@@ -71,7 +71,7 @@ const DailyTipsList = () => {
                         variant="contained"
                         color="success"
                         onClick={() => {
-                            navigate("dailyTips/add");
+                            navigate("add");
                         }}
                     >
                         Add <AddIcon />
@@ -123,7 +123,7 @@ const DailyTipsList = () => {
                                     <Button
                                         onClick={() => {
                                             navigate(
-                                                `dailyTips/edit/${dailyTip.id}`
+                                                `edit/${dailyTip.id}`
                                             );
                                         }}
                                     >

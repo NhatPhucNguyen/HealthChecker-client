@@ -5,12 +5,13 @@ import {
     createHttpLink,
 } from "@apollo/client";
 import { Route, Routes } from "react-router-dom";
-import PatientList from "./components/PatientList";
-import VitalSignList from "./components/VitalSignList";
-import VitalSignForm from "./components/VitalSignForm";
-import Patient from "./pages/Patient";
-import DailyTipsList from "./components/DailyTipsList";
+import AlertList from "./components/AlertList";
 import DailyTipForm from "./components/DailyTipForm";
+import DailyTipsList from "./components/DailyTipsList";
+import PatientList from "./components/PatientList";
+import VitalSignForm from "./components/VitalSignForm";
+import VitalSignList from "./components/VitalSignList";
+import Patient from "./pages/Patient";
 const link = createHttpLink({
     uri: "http://localhost:5000/graphql",
     credentials: "include",
@@ -26,8 +27,7 @@ const NurseApp = () => {
         <ApolloProvider client={client}>
             <Routes>
                 <Route path="/" element={<PatientList />} />
-                <Route path=":patientId">
-                    <Route index element={<Patient />} />
+                <Route path="/:patientId" element={<Patient />}>
                     <Route path="vitalSigns">
                         <Route index element={<VitalSignList />} />
                         <Route path="add" element={<VitalSignForm />} />
@@ -43,6 +43,9 @@ const NurseApp = () => {
                             path="edit/:dailyTipId"
                             element={<DailyTipForm isUpdate />}
                         />
+                    </Route>
+                    <Route path="alerts">
+                        <Route index element={<AlertList />} />
                     </Route>
                 </Route>
             </Routes>

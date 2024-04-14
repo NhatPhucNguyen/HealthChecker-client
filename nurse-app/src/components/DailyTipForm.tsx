@@ -71,7 +71,7 @@ const DailyTipForm = ({ isUpdate }: DailyTipFormProps) => {
             });
             if (response.data) {
                 client.refetchQueries({ include: "all" });
-                navigate("../..");
+                navigate("..");
             }
         }
         if (dailyTipId) {
@@ -83,7 +83,7 @@ const DailyTipForm = ({ isUpdate }: DailyTipFormProps) => {
             });
             if (response.data) {
                 client.refetchQueries({ include: "all" });
-                navigate("../..");
+                navigate("..");
             }
         }
     };

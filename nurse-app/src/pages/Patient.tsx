@@ -1,13 +1,11 @@
-import AlertList from "../components/AlertList";
-import DailyTipsList from "../components/DailyTipsList";
-import VitalSignList from "../components/VitalSignList";
+import { Outlet } from "react-router-dom";
+import SubNav from "../components/SubNav";
 
 const Patient = () => {
     return (
         <>
-            <VitalSignList />
-            <DailyTipsList />
-            <AlertList />
+            <SubNav />
+            <Outlet />
         </>
     );
 };
