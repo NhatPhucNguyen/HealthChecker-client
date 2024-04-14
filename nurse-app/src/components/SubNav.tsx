@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 const SubNav = () => {
     return (
         <Box display={"flex"} padding={2} gap={1}>
+            <Button to={"/patients"} variant={"outlined"} color="warning" component={Link}>
+                Back to patients
+            </Button>
             <Button to={"vitalSigns"} variant={"outlined"} component={Link}>
                 Vital Signs
             </Button>
