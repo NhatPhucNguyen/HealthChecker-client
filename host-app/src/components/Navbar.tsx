@@ -1,19 +1,11 @@
-import { AccountCircle } from "@mui/icons-material";
-import {
-    AppBar,
-    Box,
-    Button,
-    IconButton,
-    Menu,
-    MenuItem,
-    Toolbar,
-} from "@mui/material";
-import { useState } from "react";
+import { AppBar, Box, Button, IconButton, Toolbar } from "@mui/material";
+import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
-    const [isAuth] = useState(false);
+    const token = localStorage.getItem("token");
+    const location = useLocation();
     return (
-        <AppBar>
+        <AppBar key={location.pathname}>
             <Toolbar>
                 <IconButton
                     size="large"
@@ -29,36 +21,25 @@ const Navbar = () => {
                         Home
                     </Button>
                 </Box>
-                {isAuth ? (
-                    <div>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            color="inherit"
-                        >
-                            <AccountCircle />
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                            }}
-                            open={true}
-                        >
-                            <MenuItem>Profile</MenuItem>
-                            <MenuItem>My account</MenuItem>
-                        </Menu>
-                    </div>
+                {token ? (
+                    <Button
+                        color="warning"
+                        variant="contained"
+                        onClick={() => {
+                            localStorage.removeItem("token");
+                            window.location.href = "/";
+                        }}
+                    >
+                        Logout
+                    </Button>
                 ) : (
-                    <Button color="success" variant="contained">
+                    <Button
+                        color="success"
+                        variant="contained"
+                        onClick={() => {
+                            window.location.href = "/";
+                        }}
+                    >
                         Login
                     </Button>
                 )}

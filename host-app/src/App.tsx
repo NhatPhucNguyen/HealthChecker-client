@@ -4,12 +4,14 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Loader from "./components/Loader";
 import Navbar from "./components/Navbar";
 const AuthApp = lazy(() => import("authApp/AuthApp"));
+const NurseApp = lazy(() => import("nurseApp/NurseApp"));
+const PatientApp = lazy(() => import("patientApp/PatientApp"));
 const App = () => {
     return (
         <>
-            <Navbar />
-            <Box component={"main"} marginTop={"7rem"} width={"100%"}>
+            <Box component={"main"} marginTop={"5rem"} width={"100%"}>
                 <BrowserRouter>
+                    <Navbar />
                     <Routes>
                         <Route
                             path="/*"
@@ -19,8 +21,22 @@ const App = () => {
                                 </Suspense>
                             }
                         />
-                        <Route path="/nurse/*" element={<div>Nurse</div>} />
-                        <Route path="/patient/*" element={<div>Patient</div>} />
+                        <Route
+                            path="/nurse/*"
+                            element={
+                                <Suspense fallback={<Loader />}>
+                                    <NurseApp />
+                                </Suspense>
+                            }
+                        />
+                        <Route
+                            path="/patient/*"
+                            element={
+                                <Suspense fallback={<Loader />}>
+                                    <PatientApp />
+                                </Suspense>
+                            }
+                        />
                     </Routes>
                 </BrowserRouter>
             </Box>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const SubNav = () => {
     return (
         <Box display={"flex"} padding={2} gap={1}>
-            <Button to={"symptoms"} variant={"outlined"} component={Link}>
+            <Button to={"/"} variant={"outlined"} component={Link}>
                 Symptoms
             </Button>
             <Button to={"fitnessGames"} variant="outlined" component={Link}>

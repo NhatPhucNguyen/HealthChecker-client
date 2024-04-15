@@ -9,6 +9,8 @@ export default defineConfig({
             name: "host-app",
             remotes: {
                 authApp: "http://localhost:5170/assets/remoteEntry.js",
+                nurseApp: "http://localhost:5171/assets/remoteEntry.js",
+                patientApp: "http://localhost:5172/assets/remoteEntry.js",
             },
             shared: [
                 "@apollo/client",

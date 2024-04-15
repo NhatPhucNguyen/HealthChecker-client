@@ -27,7 +27,6 @@ const NurseApp = () => {
         <ApolloProvider client={client}>
             <Routes>
                 <Route path="/" element={<PatientList />} />
-                <Route path="/patients" element={<PatientList />} />
                 <Route path="/:patientId" element={<Patient />}>
                     <Route path="vitalSigns">
                         <Route index element={<VitalSignList />} />

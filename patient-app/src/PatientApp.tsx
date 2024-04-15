@@ -25,7 +25,7 @@ const PatientApp = () => {
             <ApolloProvider client={client}>
                 <SubNav />
                 <Routes>
-                    <Route path="/symptoms" element={<SymptomsList />} />
+                    <Route path="/" element={<SymptomsList />} />
                     <Route path="/fitnessGames" element={<FitnessGames />} />
                 </Routes>
             </ApolloProvider>

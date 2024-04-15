@@ -16,6 +16,7 @@ import {
 import { useParams } from "react-router-dom";
 import AlertMessage from "../interfaces/Alert";
 import { useState } from "react";
+import { convertToDate } from "../utils/convertDate";
 const ALERTS = gql`
     query AlertsByPatient($patientId: ID) {
         alertsByPatient(patientId: $patientId) {
@@ -90,7 +91,8 @@ const AlertList = () => {
                             {data?.alertsByPatient.map((alert) => {
                                 return (
                                     <Alert severity="error">
-                                        {alert.message}
+                                        {alert.message} -{" "}
+                                        {convertToDate(alert.createdAt)}
                                     </Alert>
                                 );
                             })}
@@ -175,7 +177,7 @@ const AlertList = () => {
                 ) : diseases.length > 0 ? (
                     diseases.map((disease) => {
                         return (
-                            <Alert severity="info" sx={{width:"80%"}}>
+                            <Alert severity="info" sx={{ width: "80%" }}>
                                 {disease.disease} - {disease.description}
                             </Alert>
                         );
