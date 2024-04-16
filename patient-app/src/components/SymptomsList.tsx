@@ -1,5 +1,5 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { Box, Button, Checkbox, FormControlLabel, Grid } from "@mui/material";
+import { Box, Button, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import { useState } from "react";
 import { useModalContext } from "../context/ModalContext";
@@ -37,6 +37,7 @@ const SymptomsList = () => {
     const { openModal } = useModalContext();
     return (
         <Box padding={1}>
+            <Typography variant="h2" fontSize={24} fontWeight={"bold"}>Please select at least 5 symptoms:</Typography>
             <Grid container columns={3}>
                 {data?.symptoms.slice(0, 30).map((symptom) => {
                     return (

@@ -1,4 +1,13 @@
-import { Box, Modal, Typography } from "@mui/material";
+import { gql, useMutation } from "@apollo/client";
+import {
+    Box,
+    Button,
+    FormControl,
+    Modal,
+    TextField,
+    Typography,
+} from "@mui/material";
+import { jwtDecode } from "jwt-decode";
 import { createContext, useContext, useState } from "react";
 type ModalContent = {
     title: string;
@@ -6,7 +15,7 @@ type ModalContent = {
     color?: string;
 };
 type ModalContextValues = {
-    openModal: (modalContent: ModalContent) => void;
+    openModal: (modalContent: ModalContent, isAlert?: boolean) => void;
     closeModal: () => void;
 };
 const style = {
@@ -21,18 +30,35 @@ const style = {
     p: 4,
 };
 const ModalContext = createContext<ModalContextValues | null>(null);
-
+const SEND_ALERT = gql`
+    mutation Mutation($alertInput: AlertInput) {
+        createAlert(alertInput: $alertInput) {
+            id
+            patientId
+        }
+    }
+`;
 const ModalProvider = ({ children }: { children: React.ReactNode }) => {
     const [content, setContent] = useState<ModalContent>({} as ModalContent);
     const [open, setOpen] = useState(false);
-    const openModal = (modalContent: ModalContent) => {
+    const [sendAlert, setSendAlert] = useState(false);
+    const [message, setMessage] = useState("");
+    const { userId: patientId } = jwtDecode(
+        localStorage.getItem("token") as string
+    ) as { userId: string };
+    const openModal = (modalContent: ModalContent, isAlert?: boolean) => {
+        if (isAlert) {
+            setSendAlert(isAlert);
+        }
         setContent(modalContent);
         setOpen(true);
     };
     const closeModal = () => {
         setContent({} as ModalContent);
+        setSendAlert(false);
         setOpen(false);
     };
+    const [sendAlertMutation] = useMutation(SEND_ALERT);
     return (
         <ModalContext.Provider value={{ openModal, closeModal }}>
             {children}
@@ -54,6 +80,44 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                         {content.content}
                     </Typography>
+                    {sendAlert && (
+                        <Box
+                            component={"form"}
+                            width={"100%"}
+                            sx={{ margin: "auto", marginTop: 2 }}
+                            onSubmit={async (e) => {
+                                e.preventDefault();
+                                const response = await sendAlertMutation({
+                                    variables: {
+                                        alertInput: {
+                                            message: message,
+                                            patientId: patientId,
+                                        },
+                                    },
+                                });
+                                if (response.data) {
+                                    closeModal();
+                                }
+                            }}
+                        >
+                            <FormControl fullWidth>
+                                <TextField
+                                    label="Message"
+                                    fullWidth
+                                    onChange={(e) => {
+                                        setMessage(e.target.value);
+                                    }}
+                                />
+                            </FormControl>
+                            <Button
+                                variant="contained"
+                                sx={{ marginTop: 2 }}
+                                type="submit"
+                            >
+                                Send
+                            </Button>
+                        </Box>
+                    )}
                 </Box>
             </Modal>
         </ModalContext.Provider>

@@ -9,6 +9,8 @@ import SubNav from "./components/SubNav";
 import SymptomsList from "./components/SymptomsList";
 import FitnessGames from "./components/FitnessGames";
 import ModalProvider from "./context/ModalContext";
+import DailyInformation from "./components/DailyInformation";
+import DailyInformationForm from "./components/DailyInformationForm";
 const PatientApp = () => {
     const link = createHttpLink({
         uri: "http://localhost:5000/graphql",
@@ -21,15 +23,23 @@ const PatientApp = () => {
         }),
     });
     return (
-        <ModalProvider>
-            <ApolloProvider client={client}>
+        <ApolloProvider client={client}>
+            <ModalProvider>
                 <SubNav />
                 <Routes>
-                    <Route path="/" element={<SymptomsList />} />
+                    <Route path="/" index element={<SymptomsList />} />
                     <Route path="/fitnessGames" element={<FitnessGames />} />
+                    <Route path="/dailyInformation">
+                        <Route index element={<DailyInformation />} />
+                        <Route path="add" element={<DailyInformationForm />} />
+                        <Route
+                            path="edit/:dailyInformationId"
+                            element={<DailyInformationForm isUpdate />}
+                        />
+                    </Route>
                 </Routes>
-            </ApolloProvider>
-        </ModalProvider>
+            </ModalProvider>
+        </ApolloProvider>
     );
 };
 

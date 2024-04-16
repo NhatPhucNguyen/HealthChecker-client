@@ -113,7 +113,7 @@ const DailyTipForm = ({ isUpdate }: DailyTipFormProps) => {
                 fontSize={24}
                 fontWeight={"bold"}
             >
-                Add Daily Tip
+                {isUpdate ? "Update" : "Add"} Daily Tip
             </Typography>
             {alert && <Alert severity="error">{alert}</Alert>}
             <FormControl fullWidth sx={{ marginTop: 1 }}>
